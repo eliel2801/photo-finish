@@ -1,0 +1,21 @@
+services:
+  agent:
+    build: .
+    # What `plow-agents mint` wrote: where Plow is, and this agent's token.
+    # When Plow runs the image as a cloud agent it sets the environment itself.
+    # PLOW_CREDENTIALS can point at a credential outside the checkout, so a
+    # `down -v` cannot wipe it.
+    env_file: ${PLOW_CREDENTIALS:-./plow-credentials}
+    volumes:
+      # The agent's home: its sessions, its cron jobs, and this agent's own
+      # config.json and state.json. Kept across up/down so a rebuild does not
+      # make it forget which row it watches or which countdown marks it spent.
+      # A skill edit reaches it on rebuild + restart via the base's reconcile;
+      # only a full reset needs `down -v`.
+      - agent-home:/var/lib/hermes
+    # The agent checkpoints its session on SIGTERM and its supervisor allows
+    # 30s for that, so Docker's deadline has to sit outside that one.
+    stop_grace_period: 35s
+
+volumes:
+  agent-home:
