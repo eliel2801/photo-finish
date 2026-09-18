@@ -3,5 +3,5 @@
 plow-credentials
 *.pyc
 __pycache__/
-tests/
+
 README.md

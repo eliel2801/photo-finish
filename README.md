@@ -64,6 +64,33 @@ agent> Locked in: ReceiptSnap (receiptsnap) — #4, 2 installs.
 
 Setup registers two background jobs and then gets out of your way.
 
+## Publishing it to the Index
+
+The base image carries the Agent Index usage reporter as a supervised service —
+it reports token usage every five minutes, and building on that base is what
+satisfies the hackathon's "must use the AI Worth Using client" rule. It reads
+three variables from the credential file, and **all three matter**:
+
+```bash
+cat >> plow-credentials <<'VARS'
+AGENT_ID=photo-finish
+AGENT_NAME=Photo Finish
+AGENT_BLURB=Watches the Agent Index and texts you only when your standing moves.
+VARS
+
+docker compose up -d
+```
+
+- `AGENT_ID` — without it the reporter stands down entirely. Nothing is
+  reported, nothing registers, and the agent looks like it is working.
+- `AGENT_NAME` / `AGENT_BLURB` — optional, and **unset is not a blank page**:
+  the Index stores the slug as the name and an empty blurb, permanently, and
+  the builder cannot discover this from inside the container. Two agents on the
+  live board are sitting there right now under a bare lowercase slug with no
+  description. Set them before the first boot that registers.
+
+After the restart the client registers the listing on its own.
+
 ## How it works
 
 ```
