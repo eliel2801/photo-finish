@@ -1,0 +1,4 @@
+# The image is Linux and installers clone this on Mac and Linux.
+# CRLF in a script that the container executes is a failure that only shows up
+# in someone else's checkout, which is the worst place to find it.
+* text=auto eol=lf
