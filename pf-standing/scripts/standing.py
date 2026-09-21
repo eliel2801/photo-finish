@@ -43,7 +43,8 @@ def main():
     out = []
 
     if me:
-        out.append(f"You are #{me['pos']} with {me['users']} installs. {left}.")
+        unit = "install" if me["users"] == 1 else "installs"
+        out.append(f"You are #{me['pos']} with {me['users']} {unit}. {left}.")
         target, need = pf.ahead_of(rows, me)
         if target:
             out.append(f"#{target['pos']} {target['name']} has {target['users']}; +{need} takes the spot.")

@@ -45,7 +45,8 @@ def mark_message(hours, rows, me):
     lines = [f"{pf.humanize_left(hours)} to the snapshot."]
     if me:
         target, need = pf.ahead_of(rows, me)
-        lines.append(f"You: #{me['pos']}, {me['users']} installs.")
+        unit = "install" if me["users"] == 1 else "installs"
+        lines.append(f"You: #{me['pos']}, {me['users']} {unit}.")
         if target:
             lines.append(f"+{need} would take #{target['pos']} from {target['name']} ({target['users']}).")
         else:
@@ -61,7 +62,8 @@ def final_message(rows, me):
     lines = ["Snapshot time. Final board:", "", board(rows, limit=5)]
     if me:
         lines.append("")
-        lines.append(f"You finished #{me['pos']} with {me['users']} installs.")
+        unit = "install" if me["users"] == 1 else "installs"
+        lines.append(f"You finished #{me['pos']} with {me['users']} {unit}.")
     return "\n".join(lines)
 
 

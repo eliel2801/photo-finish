@@ -98,7 +98,8 @@ def main():
     config["agent_id"] = me["agent_id"]
     pf.save_config(config)
     pf.save_state({})
-    print(f"Locked in: {me['name']} ({me['agent_id']}) -- #{me['pos']}, {me['users']} installs.")
+    unit = "install" if me["users"] == 1 else "installs"
+    print(f"Locked in: {me['name']} ({me['agent_id']}) -- #{me['pos']}, {me['users']} {unit}.")
     print(f"{pf.humanize_left(pf.hours_left(config))} to the snapshot. I will text you when it moves.")
     if not me["verified"]:
         print("Heads up: this row is NOT verified yet, so it cannot win. Ask the hosts on Discord.")

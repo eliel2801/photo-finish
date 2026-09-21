@@ -1,3 +1,5 @@
+<img src="docs/assets/photo-finish-logo.png" alt="" width="96" align="right">
+
 # Photo Finish
 
 **You are not going to stop refreshing the leaderboard. So stop refreshing the leaderboard.**
@@ -38,6 +40,29 @@ which is the actual chore, and it is the one this agent does end to end.
 No agent of your own yet? **Spectator mode** follows the podium and the
 countdown. Registering for a hackathon and not shipping is common; being shut
 out of watching it is not a good reason to uninstall something.
+
+## What it looks like
+
+<table>
+<tr>
+<td align="center"><img src="docs/assets/photo-finish-01-setup.png" width="200" alt="Setup: one question, then the row is locked in and two jobs registered"></td>
+<td align="center"><img src="docs/assets/photo-finish-03-alert.png" width="200" alt="The alert: +1 install, position up, what it would take to move again"></td>
+<td align="center"><img src="docs/assets/photo-finish-02-standing.png" width="200" alt="On demand: position, gap, time left and the gates"></td>
+<td align="center"><img src="docs/assets/photo-finish-04-final.png" width="200" alt="The last day: a countdown mark, then the final board once"></td>
+</tr>
+<tr>
+<td align="center"><sub>Setup is one question.</sub></td>
+<td align="center"><sub>The alert, then nineteen hours of nothing.</sub></td>
+<td align="center"><sub>Ask, and get the number without the tab.</sub></td>
+<td align="center"><sub>Four marks on the last day, then the board once.</sub></td>
+</tr>
+</table>
+
+The text in every bubble is what the agent's own scripts printed against the
+live Index on 2026-09-21 (`setup.py`, `standing.py`, `poll.py --dry-run`,
+`countdown.py --force`), with one install simulated for the alert. The phone
+frame around it is a render, not a photo of a phone: the conversation happens
+over iMessage and a screenshot of it would show exactly these words.
 
 ## Install
 
