@@ -128,18 +128,40 @@ can answer and a thing you read about afterwards.
 
 ## media
 
-`docs/assets/` holds the screenshots this listing points at. Each one needs a
-caption; the Index renders it underneath.
+`docs/assets/` holds what the listing points at. All of it went up on
+2026-09-21 with the account token and no container running: `plow-agents
+image set photo-finish --screenshot URL` (repeated; the list is replaced, not
+appended) for the images, and `POST /v1/agent-logo?agent_id=photo-finish`
+with the same Index assertion `image set` uses for the logo, which `image set`
+itself has no flag for.
 
-| file | caption |
+| file | what it shows |
 | --- | --- |
-| `photo-finish-alert.png` | `One install, one message. The other seventy-one runs that day sent nothing.` |
-| `photo-finish-standing.png` | `Asked on demand: position, gap, and time left in one line.` |
-| `photo-finish-countdown.png` | `One of four countdown marks on the final day, with what it would take to move up.` |
+| `photo-finish-logo.png` | the listing's avatar: a checkered finish-line ribbon on green |
+| `photo-finish-01-setup.png` | setup: one question, the row locked in, two jobs registered |
+| `photo-finish-03-alert.png` | the alert, then nineteen hours of nothing |
+| `photo-finish-02-standing.png` | asked on demand: position, gap, time left, the gates |
+| `photo-finish-04-final.png` | a countdown mark on the last day, then the final board once |
 
-Capture these from the real conversation after deploy. A mock is worse than
-none: the one thing this listing is claiming is that the agent is quiet, and a
-staged screenshot cannot show seventy-one messages that were never sent.
+The Index shows no captions, and renders the images as a two-column grid of
+portrait tiles (189x358 px, cover-cropped), which is why these are phone-shaped
+(1080x2044) rather than the square that the README's table would suggest.
+
+The text in each screen is the scripts' own output against the live board on
+2026-09-21; the alert is `poll.py --dry-run` with one install simulated. The
+phone frame is a render. The README says so in as many words, because the one
+thing this listing claims is that the agent is quiet, and a listing that
+overstated its evidence would be the wrong place to start.
+
+The three `--story` entries under USE CASES were posted the same way (the Index
+accepts the account assertion on `/v1/stories` too); they describe what the
+agent has actually done since setup and nothing it has not.
+
+## video
+
+`--video` still takes a YouTube ID. The demo is built (`photo-finish-demo.mp4`,
+39.8 s, 1080p, eight slides rendered from `docs/assets`) and waits on an upload;
+until the ID is set the row keeps its WIP badge no matter what else is on it.
 
 ---
 
