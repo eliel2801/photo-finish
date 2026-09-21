@@ -13,7 +13,7 @@ curl -O https://raw.githubusercontent.com/plow-pbc/agent-index-client/main/stand
 set -a; . ./plow-credentials; set +a
 python3 agent_index_client.py --register --agent photo-finish \
   --name "Photo Finish" \
-  --blurb "Watches the Agent Index and texts you only when your standing moves." \
+  --blurb "Stop refreshing this leaderboard. It tracks your rank, the top 3 and who just passed you, and texts you the moment any of it moves. Silence when nothing did." \
   --repo "https://github.com/eliel2801/photo-finish" \
   --runtime hermes \
   --install-url "https://github.com/eliel2801/photo-finish/blob/main/INSTALL.md" \
@@ -68,8 +68,13 @@ Photo Finish
 One line, and it has to survive being read in a list next to sixty others.
 
 ```
-Watches the Agent Index and texts you only when your standing actually moves.
+Stop refreshing this leaderboard. It tracks your rank, the top 3 and who just passed you, and texts you the moment any of it moves. Silence when nothing did.
 ```
+
+Live on the Index since 2026-09-21, set with `plow-agents image set photo-finish
+--blurb`. That command edits a listing you own using the account token, so it
+works with no container running -- the `--register` call needs a Plow agent
+credential, this one does not.
 
 ## repo
 
