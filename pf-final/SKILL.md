@@ -58,9 +58,13 @@ the one-hour message today.
 ## The clock this counts against
 
 `snapshot_at` in `/var/lib/hermes/pf/config.json`, defaulting to
-`2026-09-22T20:00:00Z`. The Luma listing's body says one day later than its own
-end time; this counts to the earlier one on purpose. `pf-setup --snapshot-at`
-changes it if the hosts confirm otherwise.
+`2026-09-23T20:00:00Z` — what the hosts' own hackathon card on the Agent Index
+calls the final ranking, and a day later than the Luma listing's end time.
+`pf-setup --snapshot-at` changes it.
+
+Getting this wrong in the early direction is the expensive one: zero posts the
+final board and records the mark, so the agent announces a result that has not
+happened and then prints "final already sent" for the rest of the race.
 
 ## State
 

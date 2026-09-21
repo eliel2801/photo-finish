@@ -32,12 +32,23 @@ PF_HOME = pathlib.Path(os.environ.get("PF_HOME") or "/var/lib/hermes/pf")
 CONFIG_PATH = PF_HOME / "config.json"
 STATE_PATH = PF_HOME / "state.json"
 
-# The hackathon's own clock. The Luma listing ends 2026-09-22T20:00Z while its
-# body says "September 23rd, 1pm PT" -- one day apart, and nobody is served by
-# this agent guessing. The earlier one is the default because a countdown that
-# runs early costs a nudge and one that runs late costs the prize; `snapshot_at`
-# in config.json overrides it the moment the hosts confirm which is real.
-DEFAULT_SNAPSHOT = "2026-09-22T20:00:00Z"
+# The hackathon's own clock, and it took the hosts to settle it. The Luma
+# listing ENDS 2026-09-22T20:00Z while the body of that same listing says
+# "September 23rd, 1pm PT" -- one day apart. This defaulted to the earlier one
+# on the reasoning that a countdown running early costs a nudge and one running
+# late costs the prize.
+#
+# That reasoning was wrong about what running early costs. The Agent Index's own
+# hackathon card reads "final ranking Sep 23", which is the later instant and
+# the one the hosts publish where entrants actually look. And a countdown that
+# reaches zero does not merely nudge: it posts the FINAL BOARD, records `final`
+# in marks_sent, and every run after that prints "final already sent". Counting
+# to the 22nd would have told its owner the race was over with a day still on
+# the clock, and then gone permanently silent for the only day that mattered --
+# which is precisely the failure pf-final exists to prevent.
+#
+# 1pm PT in September is UTC-7. `snapshot_at` in config.json still overrides it.
+DEFAULT_SNAPSHOT = "2026-09-23T20:00:00Z"
 
 USER_AGENT = "photo-finish agent (Agent Index watcher)"
 TIMEOUT = 20

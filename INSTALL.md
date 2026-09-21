@@ -201,10 +201,10 @@ Or just tell it in chat — that is what the setup skill is for.
 
 ## The snapshot instant
 
-It counts down to `2026-09-22T20:00:00Z`, the end time on the Luma listing. The
-body of that same listing says "September 23rd, 1pm PT" — one day apart. It
-counts to the earlier one, because a countdown that runs early costs a nudge and
-one that runs late costs the prize. If the hosts confirm the later instant:
+It counts down to `2026-09-23T20:00:00Z` — what the hackathon card on the Agent
+Index calls the final ranking. The Luma listing's own end time is a day earlier
+than its body text, and this follows the date the hosts publish where entrants
+read it. To point it somewhere else:
 
 ```bash
 docker compose exec agent python3 /opt/hermes/skills/pf-setup/scripts/setup.py --snapshot-at 2026-09-23T20:00:00Z

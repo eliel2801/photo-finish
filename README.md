@@ -196,12 +196,21 @@ This agent never presents its install order as the official result.
 
 ## The snapshot instant
 
-The Luma listing **ends** `2026-09-22T20:00:00Z`. The body of that same
-listing says **"September 23rd, 1pm PT"**. One day apart. This counts down to
-the earlier one, because a countdown that runs early costs a nudge and one
-that runs late costs the prize.
+The Luma listing **ends** `2026-09-22T20:00:00Z`. The body of that same listing
+says **"September 23rd, 1pm PT"**. One day apart.
 
-If the hosts confirm the later one:
+The hosts settled it on their own site: the hackathon card on the Agent Index
+reads **"final ranking Sep 23"**. This counts to that — `2026-09-23T20:00:00Z`,
+1pm PT being UTC-7 in September.
+
+It used to default to the earlier instant, on the reasoning that a countdown
+running early costs a nudge and one running late costs the prize. That
+undersold it. A countdown reaching zero posts the **final board**, records the
+mark, and prints "final already sent" on every run afterwards — so the earlier
+default would have announced the result with a day still on the clock and then
+gone silent through the only day that mattered.
+
+To point it somewhere else:
 
 ```bash
 python3 /opt/hermes/skills/pf-setup/scripts/setup.py --snapshot-at 2026-09-23T20:00:00Z

@@ -57,13 +57,15 @@ Safe to run again whenever the owner is not sure.
 
 ## The snapshot instant
 
-The default is `2026-09-22T20:00:00Z`, the end time on the Luma listing. The
-body of that same listing says "September 23rd, 1pm PT" — one day later. They
-disagree, and this agent does not guess: it counts down to the earlier one,
-because a countdown that runs early costs a nudge and one that runs late costs
-the prize.
+The default is `2026-09-23T20:00:00Z`. The Luma listing's own end time is a day
+earlier than its body text, and the hosts settled it on the Agent Index itself,
+whose hackathon card reads "final ranking Sep 23".
 
-If the hosts confirm the later instant, set it:
+Counting a day early is not a small error here: reaching zero posts the final
+board and spends the mark, so the agent would call the race over with a day
+left and then say nothing for the rest of it.
+
+To point it somewhere else:
 
 ```
 python3 /opt/hermes/skills/pf-setup/scripts/setup.py --snapshot-at 2026-09-23T20:00:00Z

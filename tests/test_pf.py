@@ -171,11 +171,16 @@ from datetime import datetime, timezone  # noqa: E402
 cfg = {"snapshot_at": "2026-09-22T20:00:00Z"}
 now = datetime(2026, 9, 22, 14, 0, tzinfo=timezone.utc)
 check("hours to the snapshot", round(pf.hours_left(cfg, now)), 6)
+# Counting to the wrong day does not cost a nudge, it costs the last day: the
+# countdown posts the final board, records it, and prints "final already sent"
+# forever after. The hosts' own card says "final ranking Sep 23".
+check("a day early would already have declared the race over",
+      pf.hours_left({}, datetime(2026, 9, 22, 21, 0, tzinfo=timezone.utc)) > 0, True)
 check("under an hour reads in minutes", pf.humanize_left(0.5), "30 min left")
 check("a passed snapshot says so", pf.humanize_left(-3), "the snapshot has passed")
 check("config overrides the default", pf.snapshot_at(cfg).day, 22)
-check("no config falls back to the Luma end time",
-      pf.snapshot_at({}).isoformat(), "2026-09-22T20:00:00+00:00")
+check("no config falls back to the date the hosts publish",
+      pf.snapshot_at({}).isoformat(), "2026-09-23T20:00:00+00:00")
 
 print()
 if FAILURES:
