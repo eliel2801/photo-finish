@@ -45,8 +45,9 @@ out of watching it is not a good reason to uninstall something.
 walkthrough** — prerequisites, the Plow line, the three variables that matter,
 troubleshooting, and how to uninstall. It assumes you have none of it yet.
 
-The short version, for someone who already runs Plow agents. Built on a Plow
-base image, so the Agent Index usage client is already in it.
+The short version, for someone who already runs Plow agents. The Agent Index
+usage reporter is built into this image — see below, because the base does not
+provide it and a great many entries are going to discover that late.
 
 ```bash
 git clone https://github.com/eliel2801/photo-finish.git
@@ -79,10 +80,28 @@ Setup registers two background jobs and then gets out of your way.
 
 ## Publishing it to the Index
 
-The base image carries the Agent Index usage reporter as a supervised service —
-it reports token usage every five minutes, and building on that base is what
-satisfies the hackathon's "must use the AI Worth Using client" rule. It reads
-three variables from the credential file, and **all three matter**:
+**The base image does not carry the usage reporter.** Measured inside the built
+image, on the base digest this Dockerfile pins: there is no `/opt/plow`, no
+`agent-index-client.py`, and the supervision tree holds `dashboard`,
+`hermes-gateway`, `home-guard`, `main-hermes` and `plow-init` — nothing that
+reports anything. `plow-init` publishes `AGENT_ID` into the container
+environment and nothing consumes it.
+
+The Index's own publish-an-agent instructions say as much in step 3: *bake the
+reporter into your image with `AGENT_ID=<your-agent-id>` — copy the agent-index
+service from the example.* This repo does that. `vendor/client.pin` names a
+commit of `plow-pbc/agent-index-client` and the build refuses any file that
+does not hash to the value beside it; `image/s6-overlay/` carries the service
+that runs it every five minutes.
+
+That is what satisfies the hackathon's "must use the AI Worth Using client"
+rule, and it is worth saying plainly what its absence looks like: an agent that
+boots, answers every text, polls on schedule, and scores nothing — no
+registration, no install counted, zero tokens on a board ranked by installs
+**and** usage. It looks exactly like a working agent.
+
+The reporter reads three variables from the credential file, and **all three
+matter**:
 
 ```bash
 cat >> plow-credentials <<'VARS'
@@ -149,7 +168,9 @@ during a race.
 | path | what |
 | --- | --- |
 | `INSTALL.md` | the install, for someone who has none of this yet |
-| `Dockerfile` | the base image, a persona, five skills |
+| `Dockerfile` | the base image, a persona, five skills, the usage reporter |
+| `vendor/client.pin` | the Agent Index client, pinned by commit and checksum |
+| `image/s6-overlay/` | the `agent-index` service, reporting every five minutes |
 | `runtime/persona.md` | who it is and how it speaks — short, English, never chatty |
 | `pf-shared/` | Index reads, ranking, chat transport, cron registration |
 | `pf-setup/` | which row is yours; spectator mode; the snapshot instant |
