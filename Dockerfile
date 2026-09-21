@@ -91,3 +91,17 @@ COPY image/s6-overlay/ /etc/s6-overlay/
 # a service that never starts -- silently, which is the only way this failure
 # ever presents.
 RUN chmod 0755 /etc/s6-overlay/s6-rc.d/agent-index/run
+
+# Which agent this is, baked in. plow-init's Credentials model reads the
+# process environment and NOTHING else (settings_customise_sources returns
+# env_settings alone), so AGENT_ID has to already be in the container's
+# environment when it boots. Locally that came from plow-credentials via
+# compose's env_file. On Plow's cloud a direct image reference -- not a
+# promoted `exe:` slug -- arrives with no AGENT_ID at all, the reporter logs
+# "standing down", and the agent reports zero tokens while running perfectly.
+# Measured: the cloud instance sat at the same total for seven minutes after
+# its first turn. The Index's own publish instructions say to bake it in.
+#
+# It is the same value every install must keep (INSTALL.md, step 3), so baking
+# it also removes the one variable an installer could get wrong.
+ENV AGENT_ID=photo-finish

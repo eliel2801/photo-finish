@@ -97,21 +97,22 @@ If you keep credentials outside the checkout, point at it instead, and then a
 export PLOW_CREDENTIALS=/secure/path/plow-credentials
 ```
 
-## 3. Set three variables — before the first boot
+## 3. `AGENT_ID` is already baked in
 
-Append these to the credential file **now**, not after:
-
-```
-AGENT_ID=photo-finish
-AGENT_NAME=Photo Finish
-AGENT_BLURB=Watches the Agent Index and texts you only when your standing moves.
-```
-
-**Keep `AGENT_ID=photo-finish` exactly as written.** That value is what tells the
+The image ships with `ENV AGENT_ID=photo-finish`. That value is what tells the
 Index your install belongs to this agent — it is how the install is counted and
-how the tokens your copy spends are attributed. Changing it customises nothing;
-it quietly publishes a separate empty listing under a new slug, and your install
-stops counting for the agent you meant to install.
+how the tokens your copy spends are attributed. You do not need to set it, and
+you should not override it: a different value customises nothing, it quietly
+publishes a separate empty listing under a new slug, and your install stops
+counting for the agent you meant to install.
+
+It is baked in rather than left to the credential file because plow-init reads
+`AGENT_ID` from the process environment only, and a container started on Plow's
+cloud from a plain image reference arrives with no such variable — the reporter
+then stands down and the install reports zero tokens while working perfectly.
+
+If you are publishing a fork of your own, change the `ENV` line in the
+Dockerfile and rebuild; then the two optional variables below apply to you.
 
 `AGENT_NAME` and `AGENT_BLURB` matter only if you are publishing a fork of your
 own — and **setting them is not enough on its own.** The supervised reporter
