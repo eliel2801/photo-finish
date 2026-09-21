@@ -113,11 +113,22 @@ how the tokens your copy spends are attributed. Changing it customises nothing;
 it quietly publishes a separate empty listing under a new slug, and your install
 stops counting for the agent you meant to install.
 
-The other two matter only if you are publishing a fork of your own. Leaving them
-unset is **not** a blank page: the Index stores the slug as the name and an empty
-blurb, permanently, and you cannot discover or fix this from inside the
-container. Agents on the live board are sitting there right now under a bare
-lowercase slug with no description because of exactly this.
+`AGENT_NAME` and `AGENT_BLURB` matter only if you are publishing a fork of your
+own — and **setting them is not enough on its own.** The supervised reporter
+registers with `--register --agent "$AGENT_ID"` and nothing else, so it publishes
+your slug as the name and an empty blurb no matter what those two variables say.
+This repo's own listing came up that way on its first boot with all three set.
+
+Fixing it is one call, from inside the container, after it is up:
+
+```bash
+docker compose exec -u hermes -e HERMES_HOME=/var/lib/hermes -e HOME=/var/lib/hermes agent \
+  /opt/hermes/.venv/bin/python3 /opt/plow/agent-index-client.py --register --agent <your-slug> \
+  --name "<Name>" --blurb "<one line>" --repo "<url>" --runtime hermes --install-url "<url>"
+```
+
+Re-registering your own id updates the page. On an id somebody else published the
+client returns 409 and leaves their page alone.
 
 ## 4. Bring it up
 
