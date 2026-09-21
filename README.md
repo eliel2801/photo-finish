@@ -53,8 +53,16 @@ git clone https://github.com/eliel2801/photo-finish.git
 cd photo-finish
 
 plow-agents login
-plow-agents deploy --local --line ln_p1
+plow-agents lines                 # pick one showing `free`
+plow-agents mint ln_xxx           # writes plow-credentials
+# ... append the three AGENT_* variables below, THEN:
+docker compose up -d
 ```
+
+Not `plow-agents deploy --local`, convenient as it is: it mints and starts
+Compose in one move, and the three variables have to be written between those
+two. A container that boots without `AGENT_ID` registers a listing nobody can
+correct from inside it.
 
 Then text it. It will ask which row on the Index is yours:
 

@@ -21,10 +21,11 @@ something you don't have, it says so before you start typing.
 
 **About the line.** A Plow account holds roughly five or six lines, and they are
 ephemeral rather than permanent allocations. If every one of yours is already
-bound to another agent, minting fails with a message saying exactly that — free
-one first, then come back. Discovering this at deploy time is the most common
-way this install runs long, which is why it sits at the top of the page instead
-of down in troubleshooting.
+bound to another agent, minting fails with a message saying exactly that. Run
+`plow-agents lines` to see which are `free`, and `plow-agents revoke ln_xxx` to
+retire an agent on one you no longer run. Discovering this at deploy time is the
+most common way this install runs long, which is why it sits at the top of the
+page instead of down in troubleshooting.
 
 **You do not need an agent of your own on the Index.** Photo Finish has a
 spectator mode that follows the podium and the countdown. Registering for a
@@ -69,9 +70,20 @@ cd photo-finish
 ## 2. Mint your own credential
 
 ```bash
-plow-agents login
-plow-agents mint --line <one-of-your-free-lines>
+plow-agents login          # prints a number and a phrase — text the phrase to it
+plow-agents lines          # your lines, with IDs and availability
+plow-agents mint ln_xxx    # the ID of a line showing `free`
 ```
+
+`mint` takes the line ID as a plain argument, not a flag. `lines` marks a line
+held by another account as `in use`, your own agents by their uid, and prints
+`unknown` when the API is too old to say — treat `unknown` as "try it and see".
+
+There is a one-step alternative, `plow-agents deploy --local --line ln_xxx`,
+which mints the credential **and immediately starts Compose**. Do not use it
+here. Step 3 has to happen between minting and the first boot, and that command
+leaves no room between them — the container comes up before `AGENT_ID` exists
+and registers a listing you cannot fix from inside it.
 
 This writes a `plow-credentials` file in the working directory holding **your**
 Plow endpoint and **your** agent token. It is yours alone: it is gitignored, it
@@ -162,7 +174,8 @@ a schedule gets muted, and a muted agent is worthless during a race.
 
 | symptom | cause | fix |
 | --- | --- | --- |
-| `mint` fails saying lines are in use | all your lines are bound | free one, then mint again |
+| `mint` fails saying lines are in use | all your lines are bound | `plow-agents revoke ln_xxx`, then mint again |
+| `mint` rejects `--line` | the line ID is positional | `plow-agents mint ln_xxx` |
 | container up, no reply to your text | credential minted for a different line | re-mint against the line you texted |
 | it never speaks first | crons were never registered | run `register_crons.py` inside the container (below) |
 | `PLOW_AGENT_TOKEN is unset` in logs | `plow-credentials` missing or empty | check `env_file` resolves; re-run `plow-agents mint` |
@@ -200,11 +213,14 @@ docker compose exec agent python3 /opt/hermes/skills/pf-setup/scripts/setup.py -
 ## Uninstalling
 
 ```bash
+plow-agents revoke         # retire this credential's agent
 docker compose down        # stop it, keep what it remembers
 docker compose down -v     # stop it and forget everything
 ```
 
-Then release the line in your Plow account so it is free for your next agent.
+`revoke` with no argument retires the agent belonging to the credential file;
+give it a line ID to retire whatever is on that line. Do it before you delete
+the credential, or the line stays held by an agent you can no longer reach.
 
 ---
 
