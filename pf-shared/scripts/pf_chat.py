@@ -55,9 +55,9 @@ def send(text, dry_run=False):
         raise ValueError("refusing to post an empty message")
 
     if dry_run:
-        print("--- dry-run, nada foi enviado ---")
+        print("--- dry-run, nothing was sent ---")
         print(text)
-        print("--- fim ---")
+        print("--- end ---")
         return text
 
     url, token = chat_endpoint()

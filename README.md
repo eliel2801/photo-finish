@@ -41,10 +41,15 @@ out of watching it is not a good reason to uninstall something.
 
 ## Install
 
-Built on a Plow base image, so the Agent Index usage client is already in it.
+**Installing this rather than reading it? [INSTALL.md](INSTALL.md) is the full
+walkthrough** — prerequisites, the Plow line, the three variables that matter,
+troubleshooting, and how to uninstall. It assumes you have none of it yet.
+
+The short version, for someone who already runs Plow agents. Built on a Plow
+base image, so the Agent Index usage client is already in it.
 
 ```bash
-git clone https://github.com/<you>/photo-finish.git
+git clone https://github.com/eliel2801/photo-finish.git
 cd photo-finish
 
 plow-agents login
@@ -91,6 +96,22 @@ docker compose up -d
 
 After the restart the client registers the listing on its own.
 
+### Point the listing at the install instructions
+
+Registration alone leaves `install_url` empty, and the Index then shows the
+owner a notice saying the agent was never configured — where a visitor expects
+an **installs** link. Set it explicitly, once, from inside the container:
+
+```bash
+find / -name 'agent_index_client.py' 2>/dev/null     # confirm the path in your base image
+set -a; . ./plow-credentials; set +a
+python3 <path>/agent_index_client.py --register --agent 'photo-finish' --install-url 'https://github.com/eliel2801/photo-finish/blob/main/INSTALL.md'
+```
+
+Register **once**. Running this against a second slug does not rename the
+listing, it creates another one, and two listings of the same agent split the
+installs between them.
+
 ## How it works
 
 ```
@@ -119,6 +140,7 @@ during a race.
 
 | path | what |
 | --- | --- |
+| `INSTALL.md` | the install, for someone who has none of this yet |
 | `Dockerfile` | the base image, a persona, five skills |
 | `runtime/persona.md` | who it is and how it speaks — short, English, never chatty |
 | `pf-shared/` | Index reads, ranking, chat transport, cron registration |
