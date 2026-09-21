@@ -36,9 +36,13 @@ def board(rows, limit=3):
     return "\n".join(f"{r['pos']}. {r['name']} - {r['users']}" for r in rows[:limit])
 
 
-def mark_message(hours, rows, me, config):
-    left = pf.humanize_left(pf.hours_left(config))
-    lines = [f"{left} to the snapshot."]
+def mark_message(hours, rows, me):
+    """The message for one mark. `hours` is what gets rendered, so production
+    passes the real time left -- to the minute, never rounded up to the mark --
+    and --force passes the mark it is simulating. Recomputing the clock in here
+    instead would make every forced replay print today's number and show the
+    tester the one message they did not ask to see."""
+    lines = [f"{pf.humanize_left(hours)} to the snapshot."]
     if me:
         target, need = pf.ahead_of(rows, me)
         lines.append(f"You: #{me['pos']}, {me['users']} installs.")
@@ -78,7 +82,16 @@ def main():
 
     if args.force:
         forced = args.force.strip()
-        text = final_message(rows, me) if forced == FINAL else mark_message(int(forced), rows, me, config)
+        if forced == FINAL:
+            text = final_message(rows, me)
+        else:
+            if not forced.isdigit() or int(forced) not in MARKS:
+                allowed = ", ".join(str(m) for m in MARKS)
+                sys.exit(f"--force takes one of: {allowed}, {FINAL} (got {args.force!r})")
+            text = mark_message(float(forced), rows, me)
+        # Always a dry run: --force exists to show a mark early, and a replay
+        # that posted for real would spend an interruption the clock has not
+        # earned yet.
         pf_chat.send(text, dry_run=True)
         return 0
 
@@ -100,7 +113,7 @@ def main():
     # Only the tightest mark that came due. Crossing two at once -- a restart
     # after a long gap -- is one message, not two.
     mark = min(due)
-    pf_chat.send(mark_message(mark, rows, me, config), dry_run=args.dry_run)
+    pf_chat.send(mark_message(hours, rows, me), dry_run=args.dry_run)
     if not args.dry_run:
         # Every mark at or above this one is spent: they can never come due
         # again, and leaving them unrecorded would fire them all on the next tick.

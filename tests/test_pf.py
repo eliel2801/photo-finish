@@ -88,6 +88,24 @@ evts = poll.events_for_owner(before, gained2, pf.find(gained2, "me"))
 check("passing someone says so", "You passed B." in evts, True)
 check("and reports the position", "Up to #2 (was #3)." in evts, True)
 
+# Drawing level is not passing. Competition ranking gives both rows the SAME
+# position, so an alert claiming a pass describes a board nobody else can see --
+# and it would contradict the gap line sitting right under it in the same
+# message, which counts the installs that take a place, not the ones that tie.
+drew = pf.standings(board(("a", 16), ("b", 5), ("me", 5), ("c", 2)))
+evts = poll.events_for_owner(before, drew, pf.find(drew, "me"))
+check("tying someone is not passing them", [e for e in evts if "passed" in e], [])
+check("but the installs still get reported", evts[0], "+2 installs. You are on 5.")
+check("a tie really does share the position",
+      pf.find(drew, "me")["pos"], pf.find(drew, "b")["pos"])
+
+# The row above draws level with me by losing ground: same shared position,
+# same silence about passing.
+drawn_on = pf.standings(board(("a", 16), ("b", 3), ("me", 3), ("c", 2)))
+check("being drawn level with is not being passed",
+      [e for e in poll.events_for_owner(before, drawn_on, pf.find(drawn_on, "me")) if "passed" in e],
+      [])
+
 passed = pf.standings(board(("a", 16), ("b", 5), ("me", 3), ("c", 4)))
 evts = poll.events_for_owner(passed and before, passed, pf.find(passed, "me"))
 check("being overtaken says who", "C passed you (4 vs your 3)." in evts, True)
@@ -102,6 +120,27 @@ check("a lost install reads singular too", evts[0], "-1 install -- the Index now
 fresh = pf.standings(board(("a", 16), ("b", 5), ("me", 3), ("newbie", 1)))
 check("a row we have never seen is a baseline, not an alert",
       poll.events_for_owner(before, fresh, pf.find(fresh, "newbie")), [])
+
+# --------------------------------------------------------------------------
+print("\nthe listing fields a builder can still fix")
+# --------------------------------------------------------------------------
+# Unanimous among the rows that qualify and roughly a third of those below, so
+# these are entry fees rather than differentiators -- and standing.py reads them
+# straight off the row. A missing field must read as missing, not as a blank
+# that quietly passes the gate.
+rich = pf.standings([
+    {"agent_id": "full", "name": "Full", "users": 4, "blessed_at": "2026-09-01",
+     "deployable_at": "2026-09-01", "has_video": True,
+     "install_url": " https://example.test/INSTALL.md ", "install_success": 100},
+    {"agent_id": "bare", "name": "Bare", "users": 2},
+])
+full, bare = pf.find(rich, "full"), pf.find(rich, "bare")
+check("install_url is carried and stripped", full["install_url"], "https://example.test/INSTALL.md")
+check("a listing with no install link reads empty", bare["install_url"], "")
+check("install_success rides along", full["install_success"], 100)
+check("an unreported success rate is None, not zero", bare["install_success"], None)
+check("gates stay false when the fields are absent",
+      [bare["verified"], bare["deployable"], bare["has_video"]], [False, False, False])
 
 # --------------------------------------------------------------------------
 print("\ndiff: spectator mode")

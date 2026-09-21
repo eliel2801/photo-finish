@@ -109,6 +109,13 @@ def standings(agents):
             "deployable": bool(a.get("deployable_at")),
             "has_video": bool(a.get("has_video")),
             "images": int(a.get("image_count") or 0),
+            # The listing's install link, and the share of installs the Index
+            # saw succeed. Both are public, and both are gates a builder can
+            # still close on the last day: an empty install_url shows visitors
+            # a "never configured" notice where the install button belongs,
+            # and a low success rate is a broken install doc, published.
+            "install_url": (a.get("install_url") or "").strip(),
+            "install_success": a.get("install_success"),
             "builder": ((a.get("builder") or {}).get("name") or ""),
         })
     return out

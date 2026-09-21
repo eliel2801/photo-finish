@@ -87,9 +87,16 @@ def events_for_owner(prev_agents, rows, me):
             continue
         was_above = int(before.get("users") or 0) > my_old_users
         is_above = row["users"] > me["users"]
+        # Passing means standing strictly above them now, not drawing level.
+        # Competition ranking gives a tie a SHARED position, so "you passed X"
+        # while both sit on #2 is a claim the board does not make. The gap
+        # report already holds this line -- ahead_of() asks for the installs
+        # that take a place, never the ones that tie it -- and these two have
+        # to agree, because they arrive in the same message.
+        is_below = row["users"] < me["users"]
         if is_above and not was_above:
             lost_to.append(row)
-        elif was_above and not is_above:
+        elif was_above and is_below:
             overtook.append(row)
 
     for row in lost_to:
@@ -164,8 +171,14 @@ def main():
     if first_run:
         # Nothing to diff against. Establish the baseline and stay quiet:
         # an agent whose first act is an unprompted alert has not earned one.
-        pf.remember(rows)
-        print(f"baseline saved: {len(rows)} agents" + (f", you are #{me['pos']}" if me else ", spectator mode"))
+        # --dry-run promises to save nothing, and this is the one path where a
+        # stranger meets it: INSTALL.md sends people here to try the agent
+        # before installing it, on a home that has no state yet.
+        if not args.dry_run:
+            pf.remember(rows)
+        where = f", you are #{me['pos']}" if me else ", spectator mode"
+        verb = "would save baseline" if args.dry_run else "baseline saved"
+        print(f"{verb}: {len(rows)} agents{where}")
         return 0
 
     events = events_for_owner(prev_agents, rows, me) if me else events_for_spectator(prev, rows)

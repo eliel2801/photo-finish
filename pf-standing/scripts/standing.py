@@ -62,8 +62,15 @@ def main():
             gates.append("not one-click deployable yet")
         if not me["has_video"]:
             gates.append("no video on your listing")
+        if not me["install_url"]:
+            gates.append("no install link -- visitors see a 'not configured' notice")
         if gates:
             out.append("Gates: " + "; ".join(gates) + ".")
+        # Not a gate: a number the Index publishes about you. Every failed
+        # install was somebody who wanted this and could not get it running.
+        rate = me["install_success"]
+        if rate is not None and rate < 100:
+            out.append(f"Install success: {rate}% -- the Index shows this publicly.")
     else:
         out.append(f"Spectator mode -- no agent of yours is being tracked. {left}.")
 
