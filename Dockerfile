@@ -12,7 +12,7 @@
 #
 # To move to a newer base, read plow-pbc/plow-hermes-agent, take the tag AND
 # its digest, bump both here, and rebuild. Never bump the tag alone.
-FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-42cb36ed16f513e9c7461b3f355acec181c8a26d@sha256:7bb771761c075ef3736c4cc7bdc48402ce325ed35b5efb529b1b31ec7956fd40
+FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-204252baa28652563c048a4f8ac5d95d30ee396d@sha256:0ed0e0380c55c37792e7c3c1af2a5e8ca4b20e5437272ff927d1199fedb3997f
 
 # Identity. plow-init writes the home's SOUL.md on every boot as the base
 # persona followed by this file, so nothing is COPYed to
