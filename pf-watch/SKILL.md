@@ -21,6 +21,7 @@ new baseline.
 | --- | --- |
 | `no change (...)` | **Nothing.** The run is complete. Do not post, do not summarize, do not acknowledge. |
 | `baseline saved: ...` | Nothing. First run after setup; there was nothing to compare against. |
+| `would save baseline: ...` | Nothing. A `--dry-run` on a home with no state yet; nothing was written. |
 | nothing / a sent message | The script already texted the owner. Do not send a second one. |
 | a traceback or an error line | Do not post to the owner. Report it in your final response so the cron log carries it. |
 

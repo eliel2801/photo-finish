@@ -49,8 +49,11 @@ python3 /opt/hermes/skills/pf-final/scripts/countdown.py --force 6
 python3 /opt/hermes/skills/pf-final/scripts/countdown.py --force final
 ```
 
-`--force` always prints and never sends, and records nothing — a preview
-cannot spend a mark that has not come due.
+`--force` takes `24`, `12`, `6`, `1` or `final`, and refuses anything else
+rather than inventing a mark. It always prints and never sends, and records
+nothing — a preview cannot spend a mark that has not come due. It renders the
+mark it is simulating, not the current hour, so `--force 1` shows the owner
+the one-hour message today.
 
 ## The clock this counts against
 

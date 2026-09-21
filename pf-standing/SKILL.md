@@ -28,12 +28,29 @@ The script prints a `Gates:` line when the owner's listing is missing something
 that decides the race independently of install count:
 
 - **Not verified.** An unverified agent cannot win, whatever the board says.
-  The fix is a human on the hosts' Discord, and the queue is the bottleneck —
-  so this is the one gate worth raising early and repeating.
+  Verification is not a favour asked on Discord — the Index splits into
+  "Verified by AI Worth Using", which the hosts install and run themselves,
+  and "Community", which anyone may publish to. Somebody executes the install
+  instructions. That makes this the one gate worth raising early and repeating.
 - **Not deployable.** No one-click install from the leaderboard.
-- **No video.** Among the agents with 2+ installs on this board, the large
-  majority carry a video on the listing; among those with 0 or 1, about half
-  do. The listing is what converts a viewer into an install.
+- **No video.** The listing is what converts a viewer into an install.
+- **No install link.** The Index shows visitors a "not configured" notice
+  exactly where the install button belongs.
+
+How strongly these separate the board, measured 2026-09-21 across 67 rows —
+quote them only if the owner asks why a gate matters, and say they were
+measured on a board that moves:
+
+| | 22 rows with 2+ installs | 45 rows with 0-1 |
+| --- | --- | --- |
+| verified | 20 | 10 |
+| video | 20 | 16 |
+| deployable | 21 | 10 |
+
+The script also prints `Install success: N%` when the Index reports under 100.
+That is not a gate, it is a public number on the owner's own page, and every
+point under a hundred is somebody who wanted the agent and could not get it
+running. Treat it as a bug report, not a score.
 
 Say the open gates plainly, once, then drop it. Repeating them every message
 is nagging, and the owner will stop reading.
