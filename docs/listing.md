@@ -1,9 +1,59 @@
 # The Agent Index listing
 
 What the public listing says, kept here so it is versioned rather than typed
-from memory into a web form at two in the morning. The Index stores these
-fields: `name`, `blurb`, `repo`, `runtime`, `install_url`, `media`,
-`use_cases`, `stories`.
+from memory into a web form at two in the morning.
+
+## How it is actually published
+
+Not through a form. The Index hands every builder the same standalone client
+and the listing is one call to it:
+
+```bash
+curl -O https://raw.githubusercontent.com/plow-pbc/agent-index-client/main/standalone/agent_index_client.py
+set -a; . ./plow-credentials; set +a
+python3 agent_index_client.py --register --agent photo-finish \
+  --name "Photo Finish" \
+  --blurb "Watches the Agent Index and texts you only when your standing moves." \
+  --repo "https://github.com/eliel2801/photo-finish" \
+  --runtime hermes \
+  --install-url "https://github.com/eliel2801/photo-finish/blob/main/INSTALL.md" \
+  --video "<YOUTUBE_VIDEO_ID>" \
+  --image "<RAW_URL_TO_A_SCREENSHOT>"
+```
+
+Three things about that call cost a gate if you get them wrong:
+
+- **`--video` takes a YouTube video ID, never a URL.** The page embeds
+  `youtube-nocookie.com/embed/<id>`, so a URL renders a broken player on a
+  public page. The client refuses a value containing `/` or `:`; anything else
+  it accepts and publishes. `has_video` is one of the three fields that is
+  13/13 among the rows currently qualifying.
+- **Register once.** Running it against a second id does not rename the
+  listing, it creates another one, and two listings split the installs. On an
+  id somebody else published, the client returns 409 and *joins* — the page
+  stays theirs and all you get is a report key.
+- **`AGENT_ID` must be baked into the image**, because the reporter reads it
+  there. Without it nothing reports and the agent looks like it is working.
+
+Check what the Index thinks before and after:
+
+```bash
+python3 agent_index_client.py status          # 0 registered, 3 not, 2 cannot tell
+python3 agent_index_client.py --agent photo-finish --dry-run
+python3 agent_index_client.py --self-check
+```
+
+## Why the token numbers need watching on Hermes specifically
+
+The client collects usage from two places, and its own docstring says why:
+agentsview — the index it shares with the Builder Index — **reports zero for
+Hermes, with no fix known upstream.** It compensates by reading Hermes' own
+store directly, `$HERMES_HOME/state.db`, where the shipped image sets
+`HERMES_HOME=/opt/data` on the volume the container keeps.
+
+Half the ranking is token usage. So `--dry-run` showing non-zero days is not a
+nicety on this runtime, it is the check that the other half of the score is
+being reported at all. Run it once after the first boot.
 
 ---
 
