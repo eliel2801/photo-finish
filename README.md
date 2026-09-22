@@ -45,16 +45,16 @@ out of watching it is not a good reason to uninstall something.
 
 <table>
 <tr>
-<td align="center"><img src="docs/assets/photo-finish-01-setup.png" width="200" alt="Setup: one question, then the row is locked in and two jobs registered"></td>
-<td align="center"><img src="docs/assets/photo-finish-03-alert.png" width="200" alt="The alert: +1 install, position up, what it would take to move again"></td>
-<td align="center"><img src="docs/assets/photo-finish-02-standing.png" width="200" alt="On demand: position, gap, time left and the gates"></td>
-<td align="center"><img src="docs/assets/photo-finish-04-final.png" width="200" alt="The last day: a countdown mark, then the final board once"></td>
+<td align="center" width="25%"><img src="docs/assets/photo-finish-01-setup.png" width="200" alt="Setup: one question, then the row is locked in and two jobs registered"></td>
+<td align="center" width="25%"><img src="docs/assets/photo-finish-03-alert.png" width="200" alt="The alert: +1 install, position up, what it would take to move again"></td>
+<td align="center" width="25%"><img src="docs/assets/photo-finish-02-standing.png" width="200" alt="On demand: position, gap, time left and the gates"></td>
+<td align="center" width="25%"><img src="docs/assets/photo-finish-04-final.png" width="200" alt="The last day: a countdown mark, then the final board once"></td>
 </tr>
 <tr>
-<td align="center"><sub>Setup is one question.</sub></td>
-<td align="center"><sub>The alert, then nineteen hours of nothing.</sub></td>
-<td align="center"><sub>Ask, and get the number without the tab.</sub></td>
-<td align="center"><sub>Four marks on the last day, then the board once.</sub></td>
+<td align="center" width="25%"><sub>Setup is one question.</sub></td>
+<td align="center" width="25%"><sub>The alert, then nineteen hours of nothing.</sub></td>
+<td align="center" width="25%"><sub>Ask, and get the number without the tab.</sub></td>
+<td align="center" width="25%"><sub>Four marks on the last day, then the board once.</sub></td>
 </tr>
 </table>
 
