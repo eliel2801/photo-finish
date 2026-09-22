@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<defs><clipPath id="c"><rect width="1024" height="1024" rx="230"/></clipPath></defs>
+<rect width="1024" height="1024" rx="230" fill="#1f3d2b"/>
+<g clip-path="url(#c)"><rect x="0" y="768" width="128" height="128" fill="#f3efe4"/>
+<rect x="128" y="768" width="128" height="128" fill="#141414"/>
+<rect x="256" y="768" width="128" height="128" fill="#f3efe4"/>
+<rect x="384" y="768" width="128" height="128" fill="#141414"/>
+<rect x="512" y="768" width="128" height="128" fill="#f3efe4"/>
+<rect x="640" y="768" width="128" height="128" fill="#141414"/>
+<rect x="768" y="768" width="128" height="128" fill="#f3efe4"/>
+<rect x="896" y="768" width="128" height="128" fill="#141414"/>
+<rect x="0" y="896" width="128" height="128" fill="#141414"/>
+<rect x="128" y="896" width="128" height="128" fill="#f3efe4"/>
+<rect x="256" y="896" width="128" height="128" fill="#141414"/>
+<rect x="384" y="896" width="128" height="128" fill="#f3efe4"/>
+<rect x="512" y="896" width="128" height="128" fill="#141414"/>
+<rect x="640" y="896" width="128" height="128" fill="#f3efe4"/>
+<rect x="768" y="896" width="128" height="128" fill="#141414"/>
+<rect x="896" y="896" width="128" height="128" fill="#f3efe4"/><path d="M192 300 a110 110 0 0 1 110 -110 h420 a110 110 0 0 1 110 110 v280 a110 110 0 0 1 -110 110 h-300 l-130 120 v-120 a110 110 0 0 1 -100 -110 z" fill="#c6f24a"/><text x="512" y="470" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="300" fill="#1f3d2b" letter-spacing="-12">+1</text></g></svg>
