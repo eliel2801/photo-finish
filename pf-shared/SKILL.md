@@ -1,9 +1,9 @@
 ---
 name: pf-shared
-description: Shared plumbing for the Photo Finish skills — reading the AI Worth Using Agent Index, ranking it, remembering the last read, posting a message to the owner, and registering the background crons. Not a skill the owner invokes; read it before changing how any other pf- skill talks to the Index or to Plow Chat, or when a pf- script fails and you need to know which layer broke.
+description: Shared plumbing for the Rank Alarm skills — reading the AI Worth Using Agent Index, ranking it, remembering the last read, posting a message to the owner, and registering the background crons. Not a skill the owner invokes; read it before changing how any other pf- skill talks to the Index or to Plow Chat, or when a pf- script fails and you need to know which layer broke.
 ---
 
-# Photo Finish — shared
+# Rank Alarm — shared
 
 Nothing here is invoked by the owner. It is the layer the four real skills sit
 on, and the rules it enforces are the ones that make this agent worth keeping

@@ -1,4 +1,4 @@
-# Installing Photo Finish
+# Installing Rank Alarm
 
 You are about to run a leaderboard watcher that texts you **only when your
 standing on the AI Worth Using Agent Index actually moves** — and stays silent
@@ -27,7 +27,7 @@ retire an agent on one you no longer run. Discovering this at deploy time is the
 most common way this install runs long, which is why it sits at the top of the
 page instead of down in troubleshooting.
 
-**You do not need an agent of your own on the Index.** Photo Finish has a
+**You do not need an agent of your own on the Index.** Rank Alarm has a
 spectator mode that follows the podium and the countdown. Registering for a
 hackathon and not shipping is common; being shut out of watching it is not a
 good reason to skip this.

@@ -91,7 +91,7 @@ def create(job, dry_run=False):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Register the Photo Finish crons, idempotently.")
+    ap = argparse.ArgumentParser(description="Register the Rank Alarm crons, idempotently.")
     ap.add_argument("--dry-run", action="store_true", help="print the commands; change nothing")
     args = ap.parse_args()
 

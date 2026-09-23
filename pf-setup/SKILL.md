@@ -3,7 +3,7 @@ name: pf-setup
 description: First-run setup — find which row on the AI Worth Using Agent Index belongs to this owner, lock it in, register the two background crons, and confirm the snapshot deadline. Also handles spectator mode for an owner who has not published an agent, and changing the snapshot instant if the hosts confirm a different one. Use on the owner's first message, when they say their agent is not being tracked, when they publish a new agent, when they ask to watch a different agent, or when they ask what this agent is watching.
 ---
 
-# Photo Finish — setup
+# Rank Alarm — setup
 
 One field decides everything: which row on the Index is theirs. The
 leaderboard is public, so there is no account to link and no token to paste.

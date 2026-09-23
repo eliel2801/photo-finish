@@ -1,6 +1,6 @@
 <img src="docs/assets/photo-finish-logo.png" alt="" width="96" align="right">
 
-# Photo Finish
+# Rank Alarm
 
 **You are not going to stop refreshing the leaderboard. So stop refreshing the leaderboard.**
 
@@ -131,7 +131,7 @@ matter**:
 ```bash
 cat >> plow-credentials <<'VARS'
 AGENT_ID=photo-finish
-AGENT_NAME=Photo Finish
+AGENT_NAME=Rank Alarm
 AGENT_BLURB=Watches the Agent Index and texts you only when your standing moves.
 VARS
 

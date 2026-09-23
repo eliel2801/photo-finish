@@ -46,7 +46,7 @@ def search(rows, term):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Tell Photo Finish which row is yours.")
+    ap = argparse.ArgumentParser(description="Tell Rank Alarm which row is yours.")
     ap.add_argument("--agent-id", help="the slug of your agent on the Index")
     ap.add_argument("--search", help="find your agent_id by agent name or builder name")
     ap.add_argument("--spectator", action="store_true", help="follow the race without an agent of your own")

@@ -12,8 +12,8 @@ and the listing is one call to it:
 curl -O https://raw.githubusercontent.com/plow-pbc/agent-index-client/main/standalone/agent_index_client.py
 set -a; . ./plow-credentials; set +a
 python3 agent_index_client.py --register --agent photo-finish \
-  --name "Photo Finish" \
-  --blurb "Stop refreshing this leaderboard. It tracks your rank, the top 3 and who just passed you, and texts you the moment any of it moves. Silence when nothing did." \
+  --name "Rank Alarm" \
+  --blurb "Your rank, the top 3 and who just passed you, texted the moment any of it moves. Stop refreshing the board." \
   --repo "https://github.com/eliel2801/photo-finish" \
   --runtime hermes \
   --install-url "https://github.com/eliel2801/photo-finish/blob/main/INSTALL.md" \
@@ -60,15 +60,19 @@ being reported at all. Run it once after the first boot.
 ## name
 
 ```
-Photo Finish
+Rank Alarm
 ```
+
+Renamed from "Photo Finish" on 2026-09-23 with `plow-agents image set photo-finish --name`.
+Only the display name changed: the slug `photo-finish` (agent id, repo, image, install
+link) stays, because a new id would be a new listing with zero installs and no stories.
 
 ## blurb
 
 One line, and it has to survive being read in a list next to sixty others.
 
 ```
-Stop refreshing this leaderboard. It tracks your rank, the top 3 and who just passed you, and texts you the moment any of it moves. Silence when nothing did.
+Your rank, the top 3 and who just passed you, texted the moment any of it moves. Stop refreshing the board.
 ```
 
 Live on the Index since 2026-09-21, set with `plow-agents image set photo-finish
@@ -109,7 +113,7 @@ hermes
 
 **The 3am install.**
 Someone in another timezone tried ReceiptSnap and it worked. The board moved at
-03:12. Photo Finish sent one message: `+1 install. You are on 4. Up to #3 (was
+03:12. Rank Alarm sent one message: `+1 install. You are on 4. Up to #3 (was
 #4).` Its owner read it at 08:40, over coffee, already knowing. They did not
 refresh anything to find out.
 

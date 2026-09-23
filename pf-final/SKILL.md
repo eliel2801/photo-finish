@@ -3,7 +3,7 @@ name: pf-final
 description: The last day and the result — fires a countdown mark at 24h, 12h, 6h and 1h before the hackathon snapshot, and posts the final board once after it. Runs hourly as the `pf-countdown` cron and does nothing on almost every run. Each mark is recorded so a restart, a rebuild or a double-fired cron cannot send it twice. Use when the pf-countdown cron fires, when the owner asks how long is left, or when they ask to see what a countdown alert looks like.
 ---
 
-# Photo Finish — the final marks
+# Rank Alarm — the final marks
 
 ```
 python3 /opt/hermes/skills/pf-final/scripts/countdown.py

@@ -1,4 +1,4 @@
-# Photo Finish — a Hermes agent that watches the Agent Index leaderboard.
+# Rank Alarm — a Hermes agent that watches the Agent Index leaderboard.
 #
 # There is no code of this agent's own below: the runtime, the boot, the chat
 # plugin and the Agent Index usage reporter all arrive with the base image.

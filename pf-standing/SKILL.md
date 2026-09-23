@@ -3,7 +3,7 @@ name: pf-standing
 description: Answer "where am I?" on demand — the owner's position on the AI Worth Using Agent Index, their install count, how many installs would take the place above, how long is left before the snapshot, and optionally reported token usage and the top of the board. Prints its answer; posts nothing, because the owner is already in the conversation that asked. Use whenever the owner asks about their rank, position, install count, token usage, who is ahead, how much time is left, or how the leaderboard looks.
 ---
 
-# Photo Finish — the standing
+# Rank Alarm — the standing
 
 ```
 python3 /opt/hermes/skills/pf-standing/scripts/standing.py

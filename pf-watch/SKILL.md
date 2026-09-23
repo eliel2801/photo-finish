@@ -3,7 +3,7 @@ name: pf-watch
 description: Poll the AI Worth Using Agent Index and text the owner ONLY when their standing moved — installs gained or lost, someone overtook them, someone they overtook, position changed. In spectator mode it speaks only when the podium changes. Runs every 20 minutes as the `pf-watch` cron; the script posts for itself and prints "no change" when there is nothing to say. Use when the pf-watch cron fires, when the owner asks to check for changes right now, or when the owner asks why they have not heard anything.
 ---
 
-# Photo Finish — the watch
+# Rank Alarm — the watch
 
 Run the poll. Let it decide. Say nothing it did not say.
 
