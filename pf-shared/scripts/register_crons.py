@@ -12,7 +12,9 @@ Neither row takes `--deliver`. That arm relays every final response, no-ops
 included, and both producers here are quiet by design: they run, they usually
 find nothing, and they post for themselves through pf_chat when they do. A
 --deliver on the watch row would text its owner "no change" seventy-two times
-a day, which is the fastest way to be muted.
+a day, which is the fastest way to be muted. Without it, Hermes still delivers
+the final response to the originating chat, so each prompt ends by asking for
+exactly [SILENT], the one reply it does not forward.
 
 Idempotency reads hermes' own state file rather than parsing `hermes cron
 list`: a name is a field there, not a substring of a human-readable listing.
@@ -45,7 +47,8 @@ JOBS = [
         "skill": "pf-watch",
         "prompt": (
             "Run the pf-watch skill: poll the Agent Index and alert only if the standing moved. "
-            "Post nothing yourself -- the skill's script decides and posts."
+            "Post nothing yourself -- the skill's script decides and posts. "
+            "Unless the script failed, your final response is exactly [SILENT]."
         ),
     },
     {
@@ -56,7 +59,8 @@ JOBS = [
         "skill": "pf-final",
         "prompt": (
             "Run the pf-final skill: fire a countdown mark if one is due, or the final board if the "
-            "snapshot has passed. Post nothing yourself -- the skill's script decides and posts."
+            "snapshot has passed. Post nothing yourself -- the skill's script decides and posts. "
+            "Unless the script failed, your final response is exactly [SILENT]."
         ),
     },
 ]

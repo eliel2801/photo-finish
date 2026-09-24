@@ -57,6 +57,12 @@ quiet by design — they run, usually find nothing, and post for themselves when
 they do. A `--deliver` on the watch row would text its owner "no change"
 seventy-two times a day.
 
+Leaving `--deliver` off is not enough on its own: a Hermes cron job still
+delivers its final response to the chat it was created from, and only a final
+response of exactly `[SILENT]` suppresses it. So every cron run of these skills
+ends on `[SILENT]`. The live agent proved it: runs that echoed `no change`
+reached the owner as a "Cronjob Response: pf-watch" text.
+
 This is the single most important fact in this repo. If a new producer is
 added, it posts through `pf_chat`; it does not take a deliver arm.
 

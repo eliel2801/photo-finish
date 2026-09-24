@@ -10,7 +10,9 @@ python3 /opt/hermes/skills/pf-final/scripts/countdown.py
 ```
 
 Runs hourly. Prints `nothing due (...)` almost every time, and on those runs
-you do nothing at all — no post, no summary, no acknowledgement.
+you do nothing at all — no post, no summary, no acknowledgement. **As a cron
+run, your final response is exactly `[SILENT]`** unless the script failed:
+Hermes texts every other final response to the owner.
 
 ## The four marks
 
@@ -37,9 +39,9 @@ the last day is when it stops being fixable.
 
 | it printed | you do |
 | --- | --- |
-| `nothing due (...)` | Nothing. |
-| `final already sent` | Nothing. |
-| nothing / a sent message | The script posted it. Do not send a second. |
+| `nothing due (...)` | Reply `[SILENT]`. |
+| `final already sent` | Reply `[SILENT]`. |
+| nothing / a sent message | Reply `[SILENT]`. The script posted it; do not send a second. |
 | an error | Do not post to the owner; report it in your final response for the log. |
 
 ## Showing the owner what a mark looks like

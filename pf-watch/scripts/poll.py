@@ -121,19 +121,22 @@ def events_for_spectator(prev, rows):
 def compose(events, rows, me, config):
     """One message. Never a digest -- the events, then one line of context."""
     lines = list(events)
-    left = pf.humanize_left(pf.hours_left(config))
+    hours = pf.hours_left(config)
+    # humanize_left() already reads as a sentence once the clock runs out;
+    # "the snapshot has passed to the snapshot." is what gluing it on gave.
+    clock = f"{pf.humanize_left(hours)} to the snapshot." if hours > 0 else "The snapshot has passed."
 
     if me:
         target, need = pf.ahead_of(rows, me)
         if target:
             lines.append(
                 f"#{target['pos']} {target['name']} is on {target['users']}; "
-                f"+{need} would take it. {left} to the snapshot."
+                f"+{need} would take it. {clock}"
             )
         else:
-            lines.append(f"You are #1 on installs. {left} to the snapshot.")
+            lines.append(f"You are #1 on installs. {clock}")
     else:
-        lines.append(f"{left} to the snapshot.")
+        lines.append(clock)
 
     return "\n".join(lines)
 
@@ -153,6 +156,13 @@ def main():
             mark = "*" if row["agent_id"] == agent_id else " "
             flag = "V" if row["verified"] else "-"
             print(f"{mark}{row['pos']:>3}. [{flag}] {row['name'][:28]:<28} {row['users']:>3}")
+        return 0
+
+    if pf.hours_left(config) <= 0:
+        # The board is frozen. A rank that moves after the snapshot changes
+        # nothing, and "Down to #24" the morning after reads like news. The
+        # final board was pf-final's to send; from here the watch is off.
+        print("snapshot passed, the watch is off")
         return 0
 
     me = pf.find(rows, agent_id) if agent_id else None

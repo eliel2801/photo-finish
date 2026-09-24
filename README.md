@@ -183,7 +183,9 @@ Hermes' `cron --deliver` relays every final response, **including the empty
 ones**. A quiet producer cannot use it — it would text you "no change"
 seventy-two times a day. So neither cron here takes a deliver arm; the scripts
 decide for themselves and post directly through Plow Chat when, and only when,
-there is something to say.
+there is something to say. The agent running the cron then ends on `[SILENT]`,
+the one final response Hermes does not forward; without it, a run that
+answered "no change" reached the owner anyway.
 
 An agent that texts on a schedule gets muted. A muted agent is worthless
 during a race.

@@ -182,6 +182,33 @@ check("config overrides the default", pf.snapshot_at(cfg).day, 22)
 check("no config falls back to the date the hosts publish",
       pf.snapshot_at({}).isoformat(), "2026-09-23T20:00:00+00:00")
 
+
+# --------------------------------------------------------------------------
+print("\nafter the snapshot")
+# --------------------------------------------------------------------------
+# The live agent texted "the snapshot has passed to the snapshot." and kept
+# reporting rank drops the morning after the board froze.
+over = {"snapshot_at": "2000-01-01T00:00:00Z"}
+late = pf.standings(board(("a", 16), ("b", 2), ("me", 1)))
+msg = poll.compose(["Down to #3 (was #2)."], late, pf.find(late, "me"), over)
+check("a passed clock reads as one sentence", msg.splitlines()[-1],
+      "#2 B is on 2; +2 would take it. The snapshot has passed.")
+check("spectator line after the snapshot", poll.compose([], late, None, over), "The snapshot has passed.")
+check("a live clock still counts down",
+      poll.compose([], late, None, {"snapshot_at": "2999-01-01T00:00:00Z"}).endswith("left to the snapshot."), True)
+
+pf.save_config({"agent_id": "me", **over})
+_fetch, _send = pf.fetch_agents, poll.pf_chat.send
+sent = []
+pf.fetch_agents = lambda: board(("a", 16), ("b", 2), ("me", 1))
+poll.pf_chat.send = lambda text, dry_run=False: sent.append(text)
+sys.argv = ["poll.py"]
+try:
+    poll.main()
+finally:
+    pf.fetch_agents, poll.pf_chat.send = _fetch, _send
+check("the watch posts nothing once the board is frozen", sent, [])
+
 print()
 if FAILURES:
     print(f"{len(FAILURES)} failure(s): {', '.join(FAILURES)}")
