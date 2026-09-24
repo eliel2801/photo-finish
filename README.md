@@ -221,6 +221,18 @@ continuously and alerting on it would mean alerting always.
 
 This agent never presents its install order as the official result.
 
+The Index lists every hackathon on one board (Hermes, OpenClaw, and rows with
+none). Standings count only your own hackathon — the `hackathon` field on your
+row, or `hackathon` in `config.json` for a spectator — so a position here is a
+position among the entries you are actually racing.
+
+## After the race
+
+The snapshot ends the race, not the listing. From then on the watch texts one
+thing: an install gained or lost, with where you now stand. Rank moves stay
+quiet — they change no result. An agent installed more than three hours after
+the snapshot skips the final board instead of opening with it.
+
 ## The snapshot instant
 
 The Luma listing **ends** `2026-09-22T20:00:00Z`. The body of that same listing

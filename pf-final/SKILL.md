@@ -41,6 +41,7 @@ the last day is when it stops being fixable.
 | --- | --- |
 | `nothing due (...)` | Reply `[SILENT]`. |
 | `final already sent` | Reply `[SILENT]`. |
+| `final skipped: ...` | Reply `[SILENT]`. Installed after the race; a final board hours late is not news, so the mark is spent unsent. |
 | nothing / a sent message | Reply `[SILENT]`. The script posted it; do not send a second. |
 | an error | Do not post to the owner; report it in your final response for the log. |
 

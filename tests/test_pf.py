@@ -39,7 +39,8 @@ def check(name, got, want):
 def board(*pairs):
     """(agent_id, users) -> the shape /v1/agents returns."""
     return [
-        {"agent_id": a, "name": a.title(), "users": u, "blessed_at": "2026-09-10T00:00:00Z"}
+        {"agent_id": a, "name": a.title(), "users": u, "blessed_at": "2026-09-10T00:00:00Z",
+         "hackathon": "hermes"}
         for a, u in pairs
     ]
 
@@ -184,30 +185,58 @@ check("no config falls back to the date the hosts publish",
 
 
 # --------------------------------------------------------------------------
+print("\nthe field")
+# --------------------------------------------------------------------------
+# The Index lists every hackathon on one board. On 2026-09-24 that put this
+# agent at #24 counting OpenClaw rows it was never racing.
+mixed = board(("a", 16), ("me", 1)) + [
+    {"agent_id": "claw", "name": "Claw", "users": 9, "hackathon": "openclaw"},
+    {"agent_id": "loose", "name": "Loose", "users": 5},
+]
+hack, racing = pf.field(mixed, "me")
+check("my row's hackathon names the field", hack, "hermes")
+check("other hackathons are not my rivals", sorted(r["agent_id"] for r in racing), ["a", "me"])
+check("a spectator takes config's hackathon",
+      [r["agent_id"] for r in pf.field(mixed, "", {"hackathon": "openclaw"})[1]], ["claw"])
+check("and falls back to hermes", pf.field(mixed, "")[0], "hermes")
+
+
+# --------------------------------------------------------------------------
 print("\nafter the snapshot")
 # --------------------------------------------------------------------------
 # The live agent texted "the snapshot has passed to the snapshot." and kept
 # reporting rank drops the morning after the board froze.
 over = {"snapshot_at": "2000-01-01T00:00:00Z"}
 late = pf.standings(board(("a", 16), ("b", 2), ("me", 1)))
-msg = poll.compose(["Down to #3 (was #2)."], late, pf.find(late, "me"), over)
-check("a passed clock reads as one sentence", msg.splitlines()[-1],
-      "#2 B is on 2; +2 would take it. The snapshot has passed.")
-check("spectator line after the snapshot", poll.compose([], late, None, over), "The snapshot has passed.")
+msg = poll.compose(["+1 install. You are on 1."], late, pf.find(late, "me"), over)
+check("after the race the context line has no clock", msg.splitlines()[-1],
+      "Now #3 of 3. The race is over; installs still count.")
 check("a live clock still counts down",
       poll.compose([], late, None, {"snapshot_at": "2999-01-01T00:00:00Z"}).endswith("left to the snapshot."), True)
 
 pf.save_config({"agent_id": "me", **over})
+if pf.STATE_PATH.exists():
+    pf.STATE_PATH.unlink()
 _fetch, _send = pf.fetch_agents, poll.pf_chat.send
 sent = []
-pf.fetch_agents = lambda: board(("a", 16), ("b", 2), ("me", 1))
 poll.pf_chat.send = lambda text, dry_run=False: sent.append(text)
 sys.argv = ["poll.py"]
-try:
+
+
+def run_poll(*pairs):
+    pf.fetch_agents = lambda: board(*pairs)
     poll.main()
+
+
+try:
+    run_poll(("a", 16), ("b", 2), ("me", 1))                 # baseline
+    run_poll(("a", 16), ("b", 2), ("c", 3), ("me", 1))       # a rival arrives, I drop a place
+    check("a rank drop after the race is silent", sent, [])
+    run_poll(("a", 16), ("b", 2), ("c", 3), ("me", 2))       # somebody installs me
+    check("an install after the race still speaks",
+          sent[0].splitlines()[0] if sent else None, "+1 install. You are on 2.")
 finally:
     pf.fetch_agents, poll.pf_chat.send = _fetch, _send
-check("the watch posts nothing once the board is frozen", sent, [])
 
 print()
 if FAILURES:

@@ -50,6 +50,18 @@ STATE_PATH = PF_HOME / "state.json"
 # 1pm PT in September is UTC-7. `snapshot_at` in config.json still overrides it.
 DEFAULT_SNAPSHOT = "2026-09-23T20:00:00Z"
 
+# The Index lists every hackathon on one board now: on 2026-09-24 it held 66
+# Hermes rows, 12 OpenClaw rows and 3 with none. Ranking across all of them
+# put this agent at #24 among entries it was never racing. The field is the
+# owner's own row's `hackathon`; a spectator has no row, so config.json's
+# `hackathon` names it, and this is what it falls back to.
+DEFAULT_HACKATHON = "hermes"
+
+# How long after the snapshot the final board is still news: the hourly
+# cron sends it at :05, and three hours covers a missed tick. An agent
+# installed a week after the race must not open with "Snapshot time".
+FINAL_GRACE_HOURS = 3
+
 USER_AGENT = "photo-finish agent (Agent Index watcher)"
 TIMEOUT = 20
 
@@ -130,6 +142,14 @@ def standings(agents):
             "builder": ((a.get("builder") or {}).get("name") or ""),
         })
     return out
+
+
+def field(agents, agent_id="", config=None):
+    """Only the rows racing in the same hackathon as mine (or, with no row of
+    my own, the one config.json names). Returns (hackathon, rows)."""
+    mine = next((a for a in agents if a.get("agent_id") == agent_id), None) if agent_id else None
+    hackathon = ((mine or {}).get("hackathon") or (config or {}).get("hackathon") or DEFAULT_HACKATHON)
+    return hackathon, [a for a in agents if a.get("hackathon") == hackathon]
 
 
 def find(rows, agent_id):

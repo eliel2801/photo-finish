@@ -19,13 +19,17 @@ That is the whole skill. The script reads the Index, diffs it against the last
 read, posts to the owner through Plow Chat if the standing moved, and saves the
 new baseline.
 
+It ranks only the owner's own hackathon (the `hackathon` field on their row):
+the Index lists every hackathon on one board. After the snapshot the race is
+over but the listing stays up, so the watch keeps running and texts one thing
+only -- an install gained or lost. Rank moves after the race stay quiet.
+
 ## What you do with its output
 
 | it printed | you do |
 | --- | --- |
 | `no change (...)` | Reply `[SILENT]`. Do not post, do not summarize, do not echo it. |
 | `baseline saved: ...` | Reply `[SILENT]`. First run after setup; there was nothing to compare against. |
-| `snapshot passed, the watch is off` | Reply `[SILENT]`. The board is frozen; pf-final sent the result. |
 | `would save baseline: ...` | Nothing. A `--dry-run` on a home with no state yet; nothing was written. |
 | nothing / a sent message | Reply `[SILENT]`. The script already texted the owner; a second copy is noise. |
 | a traceback or an error line | Do not post to the owner. Report it in your final response so the cron log carries it. |

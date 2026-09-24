@@ -79,7 +79,8 @@ def main():
     state = pf.load_state()
     sent = set(state.get("marks_sent") or [])
 
-    rows = pf.standings(pf.fetch_agents())
+    _, racing = pf.field(pf.fetch_agents(), agent_id, config)
+    rows = pf.standings(racing)
     me = pf.find(rows, agent_id) if agent_id else None
 
     if args.force:
@@ -100,6 +101,14 @@ def main():
     if hours <= 0:
         if FINAL in sent:
             print("final already sent")
+            return 0
+        if -hours > pf.FINAL_GRACE_HOURS:
+            # Installed after the race, or asleep through it. A final board
+            # days late is not a result, it is a surprise; spend the mark.
+            if not args.dry_run:
+                state["marks_sent"] = sorted(sent | {str(m) for m in MARKS} | {FINAL})
+                pf.save_state(state)
+            print("final skipped: the snapshot passed hours ago")
             return 0
         pf_chat.send(final_message(rows, me), dry_run=args.dry_run)
         if not args.dry_run:

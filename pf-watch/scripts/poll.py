@@ -107,6 +107,22 @@ def events_for_owner(prev_agents, rows, me):
     return events
 
 
+def events_after_race(prev_agents, me):
+    """Once the board is final, one thing is still news to a builder: somebody
+    installed their agent, or an install went away. Rank moves are not -- they
+    change no result, and texting them the morning after reads like a race
+    that is still on."""
+    mine = prev_agents.get(me["agent_id"])
+    if mine is None:
+        return []
+    delta = me["users"] - int(mine.get("users") or 0)
+    if delta > 0:
+        return [f"+{delta} {_plural(delta, 'install', 'installs')}. You are on {me['users']}."]
+    if delta < 0:
+        return [f"{delta} {_plural(delta, 'install', 'installs')} -- the Index now shows {me['users']}."]
+    return []
+
+
 def events_for_spectator(prev, rows):
     """Spectator mode speaks for one reason: the podium changed."""
     before = prev.get("podium") or []
@@ -122,9 +138,13 @@ def compose(events, rows, me, config):
     """One message. Never a digest -- the events, then one line of context."""
     lines = list(events)
     hours = pf.hours_left(config)
-    # humanize_left() already reads as a sentence once the clock runs out;
-    # "the snapshot has passed to the snapshot." is what gluing it on gave.
-    clock = f"{pf.humanize_left(hours)} to the snapshot." if hours > 0 else "The snapshot has passed."
+    if hours <= 0:
+        # After the race there is no place to take and no clock to beat; the
+        # clock line here once read "the snapshot has passed to the snapshot."
+        if me:
+            lines.append(f"Now #{me['pos']} of {len(rows)}. The race is over; installs still count.")
+        return "\n".join(lines)
+    clock = f"{pf.humanize_left(hours)} to the snapshot."
 
     if me:
         target, need = pf.ahead_of(rows, me)
@@ -149,20 +169,16 @@ def main():
 
     config = pf.load_config()
     agent_id = (config.get("agent_id") or "").strip()
-    rows = pf.standings(pf.fetch_agents())
+    hackathon, racing = pf.field(pf.fetch_agents(), agent_id, config)
+    rows = pf.standings(racing)
+    if not rows:
+        raise RuntimeError(f"the Index has no rows in the {hackathon!r} hackathon")
 
     if args.report:
         for row in rows[:12]:
             mark = "*" if row["agent_id"] == agent_id else " "
             flag = "V" if row["verified"] else "-"
             print(f"{mark}{row['pos']:>3}. [{flag}] {row['name'][:28]:<28} {row['users']:>3}")
-        return 0
-
-    if pf.hours_left(config) <= 0:
-        # The board is frozen. A rank that moves after the snapshot changes
-        # nothing, and "Down to #24" the morning after reads like news. The
-        # final board was pf-final's to send; from here the watch is off.
-        print("snapshot passed, the watch is off")
         return 0
 
     me = pf.find(rows, agent_id) if agent_id else None
@@ -191,7 +207,12 @@ def main():
         print(f"{verb}: {len(rows)} agents{where}")
         return 0
 
-    events = events_for_owner(prev_agents, rows, me) if me else events_for_spectator(prev, rows)
+    if pf.hours_left(config) <= 0:
+        # The board is final. An owner still hears about installs; a
+        # spectator's podium can no longer change anything, so it hears nothing.
+        events = events_after_race(prev_agents, me) if me else []
+    else:
+        events = events_for_owner(prev_agents, rows, me) if me else events_for_spectator(prev, rows)
 
     if not events:
         if not args.dry_run:
