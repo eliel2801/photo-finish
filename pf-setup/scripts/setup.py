@@ -88,7 +88,11 @@ def main():
     if not args.agent_id:
         ap.error("give me --agent-id, or --search to find it, or --spectator")
 
-    rows = pf.standings(pf.fetch_agents())
+    # The position is counted within this row's own hackathon, the same field
+    # the watch ranks -- locking in at #24 of the whole Index and then being
+    # #21 in every alert is two numbers for one place.
+    _, racing = pf.field(pf.fetch_agents(), args.agent_id.strip(), config)
+    rows = pf.standings(racing)
     me = pf.find(rows, args.agent_id.strip())
     if me is None:
         print(f"{args.agent_id!r} is not on the Index right now.")
@@ -100,7 +104,11 @@ def main():
     pf.save_state({})
     unit = "install" if me["users"] == 1 else "installs"
     print(f"Locked in: {me['name']} ({me['agent_id']}) -- #{me['pos']}, {me['users']} {unit}.")
-    print(f"{pf.humanize_left(pf.hours_left(config))} to the snapshot. I will text you when it moves.")
+    hours = pf.hours_left(config)
+    if hours > 0:
+        print(f"{pf.humanize_left(hours)} to the snapshot. I will text you when it moves.")
+    else:
+        print("The race is over and the listing stays up. I will text you when your installs move.")
     if not me["verified"]:
         print("Heads up: this row is NOT verified yet, so it cannot win. Ask the hosts on Discord.")
     return 0

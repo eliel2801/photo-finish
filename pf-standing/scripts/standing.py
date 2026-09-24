@@ -36,9 +36,11 @@ def main():
 
     config = pf.load_config()
     agent_id = (config.get("agent_id") or "").strip()
-    rows = pf.standings(pf.fetch_agents())
+    _, racing = pf.field(pf.fetch_agents(), agent_id, config)
+    rows = pf.standings(racing)
     me = pf.find(rows, agent_id) if agent_id else None
-    left = pf.humanize_left(pf.hours_left(config))
+    hours = pf.hours_left(config)
+    left = pf.humanize_left(hours) if hours > 0 else "The race is over"
 
     out = []
 
